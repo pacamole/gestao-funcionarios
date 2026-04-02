@@ -1,0 +1,18 @@
+# Ignore arquivos e pastas gerados pelo Visual Studio e outros arquivos temporários
+bin/
+obj/
+.vs/
+.vscode/
+packages/
+*.user
+*.suo
+.DS_Store
+
+# SQLite Database
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# Arquivos de log/configurações locais (Opcional, mas recomendado)
+appsettings.Development.json
