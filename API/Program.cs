@@ -1,5 +1,6 @@
 using API.data;
 using Microsoft.EntityFrameworkCore;
+using API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +13,12 @@ builder.Services.AddDbContext<AppDbContext>(
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+app.MapAreaEndpoints();
+app.MapCargoEndpoints();
+app.MapFuncionarioEndpoints();
+app.MapUsuarioEndpoints();
 
-app.MapGet("/", () => "Ops! Parece que não tem nada ainda! <br>hihihi");
+app.UseHttpsRedirection();
 
 app.Run();
 
