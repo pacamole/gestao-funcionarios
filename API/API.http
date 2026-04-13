@@ -1,6 +1,161 @@
-@API_HostAddress = http://localhost:5096
+@API_HostAddress = http://localhost:5096/api
 
-GET {{API_HostAddress}}/weatherforecast/
+### ==========================================
+### 1. ZONA DE TESTES: USUÁRIOS
+### ==========================================
+
+### Criar Usuário (POST)
+POST {{API_HostAddress}}/usuarios
+Content-Type: application/json
+
+{
+  "email": "admin@empresa.com",
+  "senha": "senha_super_segura_123",
+  "permissoes": "ADMIN"
+}
+
+### Listar Usuários (GET)
+GET {{API_HostAddress}}/usuarios
 Accept: application/json
 
-###
+### Buscar Usuário por ID (GET)
+# Substitua o ID abaixo por um ID real gerado no GET acima
+@IdUsuario = COLOQUE-O-ID-AQUI
+GET {{API_HostAddress}}/usuarios/{{IdUsuario}}
+Accept: application/json
+
+### Atualizar Usuário (PUT)
+PUT {{API_HostAddress}}/usuarios/{{IdUsuario}}
+Content-Type: application/json
+
+{
+  "id": "{{IdUsuario}}",
+  "email": "admin.novo@empresa.com",
+  "senha": "nova_senha",
+  "permissoes": "ADMIN_MASTER"
+}
+
+### Deletar Usuário (DELETE)
+DELETE {{API_HostAddress}}/usuarios/{{IdUsuario}}
+
+
+### ==========================================
+### 2. ZONA DE TESTES: ÁREAS
+### ==========================================
+
+### Criar Área (POST)
+POST {{API_HostAddress}}/areas
+Content-Type: application/json
+
+{
+  "nome": "Diretoria de Tecnologia",
+  "classificacao": "Diretoria",
+  "idResponsavel": null,
+  "idAreaPai": null
+}
+
+### Listar Áreas (GET)
+GET {{API_HostAddress}}/areas
+Accept: application/json
+
+### Buscar Área por ID (GET)
+@IdArea = COLOQUE-O-ID-AQUI
+GET {{API_HostAddress}}/areas/{{IdArea}}
+Accept: application/json
+
+### Atualizar Área (PUT)
+PUT {{API_HostAddress}}/areas/{{IdArea}}
+Content-Type: application/json
+
+{
+  "id": "{{IdArea}}",
+  "nome": "Diretoria de Tecnologia (TI)",
+  "classificacao": "Diretoria Executiva",
+  "idResponsavel": null,
+  "idAreaPai": null
+}
+
+### Deletar Área (DELETE)
+DELETE {{API_HostAddress}}/areas/{{IdArea}}
+
+
+### ==========================================
+### 3. ZONA DE TESTES: CARGOS
+### ==========================================
+
+### Criar Cargo (POST)
+POST {{API_HostAddress}}/cargos
+Content-Type: application/json
+
+{
+  "nome": "Engenheiro de Software Sênior",
+  "salario": 12500.00,
+  "idArea": "{{IdArea}}" 
+}
+
+### Listar Cargos (GET)
+GET {{API_HostAddress}}/cargos
+Accept: application/json
+
+### Buscar Cargo por ID (GET)
+@IdCargo = COLOQUE-O-ID-AQUI
+GET {{API_HostAddress}}/cargos/{{IdCargo}}
+Accept: application/json
+
+### Atualizar Cargo (PUT)
+PUT {{API_HostAddress}}/cargos/{{IdCargo}}
+Content-Type: application/json
+
+{
+  "id": "{{IdCargo}}",
+  "nome": "Arquiteto de Software",
+  "salario": 15000.00,
+  "idArea": "{{IdArea}}"
+}
+
+### Deletar Cargo (DELETE)
+DELETE {{API_HostAddress}}/cargos/{{IdCargo}}
+
+
+### ==========================================
+### 4. ZONA DE TESTES: FUNCIONÁRIOS
+### ==========================================
+
+### Criar Funcionário (POST)
+POST {{API_HostAddress}}/funcionarios
+Content-Type: application/json
+
+{
+  "nome": "Matheus Müller dos Santos",
+  "modalidade": "CLT",
+  "observacoes": "Contratado para o novo projeto",
+  "validadeContrato": "2026-12-31T00:00:00Z",
+  "idCargo": "{{IdCargo}}",
+  "idUsuario": null
+}
+
+### Listar Funcionários (GET)
+GET {{API_HostAddress}}/funcionarios
+Accept: application/json
+
+### Buscar Funcionário por ID (GET)
+@IdFuncionario = COLOQUE-O-ID-AQUI
+GET {{API_HostAddress}}/funcionarios/{{IdFuncionario}}
+Accept: application/json
+
+### Atualizar Funcionário (PUT)
+PUT {{API_HostAddress}}/funcionarios/{{IdFuncionario}}
+Content-Type: application/json
+
+{
+  "id": "{{IdFuncionario}}",
+  "nome": "Matheus Müller dos Santos",
+  "modalidade": "PJ",
+  "observacoes": "Mudança de modalidade de contrato",
+  "validadeContrato": "2028-12-31T00:00:00Z",
+  "idCargo": "{{IdCargo}}",
+  "idUsuario": null
+}
+
+### Deletar Funcionário (DELETE)
+DELETE {{API_HostAddress}}/funcionarios/{{IdFuncionario}}
