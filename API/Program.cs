@@ -11,6 +11,17 @@ builder.Services.AddDbContext<AppDbContext>(
         )
 );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+        .WithOrigins("http://localhost:3000")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 app.MapAreaEndpoints();
@@ -19,6 +30,8 @@ app.MapFuncionarioEndpoints();
 app.MapUsuarioEndpoints();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.Run();
 
