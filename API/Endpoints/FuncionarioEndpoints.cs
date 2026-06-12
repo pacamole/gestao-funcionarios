@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using API.models;
-using API.data; 
+using API.data;
 
 namespace API.Endpoints;
 
@@ -13,14 +13,35 @@ public static class FuncionarioEndpoints
         // GET: api/funcionarios
         group.MapGet("/", async (AppDbContext db) =>
         {
-            return Results.Ok(await db.Funcionarios.ToListAsync());
+            var funcionarios = await db.Funcionarios.ToListAsync();
+            funcionarios.ForEach((funcionario) =>
+            {
+                if (funcionario is not null)
+                {
+                    var cargo = db.Cargos.Find(funcionario.IdCargo);
+                    funcionario.Cargo = cargo;
+
+                    var usuario = db.Usuarios.Find(funcionario.IdUsuario);
+                    funcionario.Usuario = usuario;
+                }
+            });
+            return Results.Ok(funcionarios);
         });
 
         // GET: api/funcionarios/{id}
         group.MapGet("/{id:guid}", async (Guid id, AppDbContext db) =>
         {
             var funcionario = await db.Funcionarios.FindAsync(id);
-            return funcionario is not null ? Results.Ok(funcionario) : Results.NotFound(new { message = "Funcionário não encontrado." });
+            if (funcionario is null)
+            {
+                return Results.NotFound(new { message = "Funcionário não encontrado." });
+            }
+            var cargo = await db.Cargos.FindAsync(funcionario.IdCargo);
+            var usuario = await db.Usuarios.FindAsync(funcionario.IdUsuario);
+
+            funcionario.Cargo = cargo;
+            funcionario.Usuario = usuario;
+            return Results.Ok(funcionario);
         });
 
         // POST: api/funcionarios
@@ -54,7 +75,10 @@ public static class FuncionarioEndpoints
         group.MapDelete("/{id:guid}", async (Guid id, AppDbContext db) =>
         {
             var funcionario = await db.Funcionarios.FindAsync(id);
-            if (funcionario is null) return Results.NotFound(new { message = "Funcionário não encontrado." });
+            if (funcionario is null)
+            {
+                return Results.NotFound(new { message = "Funcionário não encontrado." });
+            }
 
             db.Funcionarios.Remove(funcionario);
             await db.SaveChangesAsync();

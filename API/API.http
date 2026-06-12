@@ -48,10 +48,10 @@ POST {{API_HostAddress}}/areas
 Content-Type: application/json
 
 {
-  "nome": "Diretoria de Tecnologia",
-  "classificacao": "Diretoria",
+  "nome": "Help",
+  "classificacao": "Tecnologia da Informação",
   "idResponsavel": null,
-  "idAreaPai": null
+  "idAreaPai": "60457c9e-0605-4af6-8a5c-3d11a4e8b7d3"
 }
 
 ### Listar Áreas (GET)
@@ -59,7 +59,7 @@ GET {{API_HostAddress}}/areas
 Accept: application/json
 
 ### Buscar Área por ID (GET)
-@IdArea = COLOQUE-O-ID-AQUI
+@IdArea = 60457c9e-0605-4af6-8a5c-3d11a4e8b7d3
 GET {{API_HostAddress}}/areas/{{IdArea}}
 Accept: application/json
 
@@ -98,7 +98,7 @@ GET {{API_HostAddress}}/cargos
 Accept: application/json
 
 ### Buscar Cargo por ID (GET)
-@IdCargo = COLOQUE-O-ID-AQUI
+@IdCargo = 1da7bd69-d8bf-4498-87a6-e1f39c81fb1a
 GET {{API_HostAddress}}/cargos/{{IdCargo}}
 Accept: application/json
 
@@ -139,7 +139,7 @@ GET {{API_HostAddress}}/funcionarios
 Accept: application/json
 
 ### Buscar Funcionário por ID (GET)
-@IdFuncionario = COLOQUE-O-ID-AQUI
+@IdFuncionario = 8fd70b84-c95e-45a4-913c-65f3b772bb8b
 GET {{API_HostAddress}}/funcionarios/{{IdFuncionario}}
 Accept: application/json
 

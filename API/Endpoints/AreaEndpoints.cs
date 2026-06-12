@@ -13,14 +13,31 @@ public static class AreaEndpoints
         // GET: api/areas
         group.MapGet("/", async (AppDbContext db) =>
         {
-            return Results.Ok(await db.Areas.ToListAsync());
+            var areas = await db.Areas.ToListAsync();
+            areas.ForEach((area) =>
+            {
+                if (area is not null)
+                {
+                    var funcionarioResponsavel = db.Funcionarios.Find(area.IdFuncionarioResponsavel);
+                    area.FuncionarioResponsavel = funcionarioResponsavel;
+                }
+            });
+            return Results.Ok(areas);
         });
 
         // GET: api/areas/{id}
         group.MapGet("/{id:guid}", async (Guid id, AppDbContext db) =>
         {
             var area = await db.Areas.FindAsync(id);
-            return area is not null ? Results.Ok(area) : Results.NotFound(new { message = "Área não encontrada." });
+            if (area is null)
+            {
+                return Results.NotFound(new { message = "Área não encontrada." });
+            }
+
+            var funcionarioResponsavel = await db.Funcionarios.FindAsync(area.IdFuncionarioResponsavel);
+            area.FuncionarioResponsavel = funcionarioResponsavel;
+
+            return Results.Ok(area);
         });
 
         // POST: api/areas
@@ -41,7 +58,7 @@ public static class AreaEndpoints
 
             area.Nome = inputArea.Nome;
             area.Classificacao = inputArea.Classificacao;
-            area.IdResponsavel = inputArea.IdResponsavel;
+            area.IdFuncionarioResponsavel = inputArea.IdFuncionarioResponsavel;
             area.IdAreaPai = inputArea.IdAreaPai;
 
             await db.SaveChangesAsync();

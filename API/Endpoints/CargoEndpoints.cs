@@ -13,14 +13,29 @@ public static class CargoEndpoints
         // GET: api/cargos
         group.MapGet("/", async (AppDbContext db) =>
         {
-            return Results.Ok(await db.Cargos.ToListAsync());
+            var cargos = await db.Cargos.ToListAsync();
+
+            cargos.ForEach((cargo) =>
+            {
+                var area = db.Areas.Find(cargo.IdArea);
+                cargo.Area = area;
+            });
+            return Results.Ok(cargos);
         });
 
         // GET: api/cargos/{id}
         group.MapGet("/{id:guid}", async (Guid id, AppDbContext db) =>
         {
             var cargo = await db.Cargos.FindAsync(id);
-            return cargo is not null ? Results.Ok(cargo) : Results.NotFound(new { message = "Cargo não encontrado." });
+            if (cargo is null)
+            {
+                return Results.NotFound(new { message = "Cargo não encontrado." });
+            }
+            
+            var area = await db.Areas.FindAsync(cargo.IdArea);
+            cargo.Area = area;
+
+            return Results.Ok(cargo);
         });
 
         // POST: api/cargos
