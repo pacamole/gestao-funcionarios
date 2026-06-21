@@ -1,17 +1,15 @@
 using API.data;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(
     options =>
     {
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
     }
-
-
 );
 
 builder.Services.AddCors(options =>
@@ -32,6 +30,44 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 var app = builder.Build();
 
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+
+        var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+        var erro = exceptionFeature?.Error;
+        
+        string mensagemErro = erro?.Message ?? "Erro inesperado no servidor.";
+
+        if (erro?.InnerException != null)
+        {
+            string erroBanco = erro.InnerException.Message;
+
+            if (erroBanco.Contains("NOT NULL constraint failed: Funcionarios.IdCargo"))
+            {
+                mensagemErro = "O cargo deve ser preenchido!";
+            }
+            else if (erroBanco.Contains("NOT NULL constraint failed: Cargos.IdArea"))
+            {
+                mensagemErro = "A area deve ser preenchida!";
+            }
+            else
+            {
+                mensagemErro = erroBanco;
+            }
+        }
+
+        await context.Response.WriteAsJsonAsync(new 
+        {
+            local = exceptionFeature?.Path,
+            erroResumido = mensagemErro
+        });
+    });
+});
+
 app.MapAreaEndpoints();
 app.MapCargoEndpoints();
 app.MapFuncionarioEndpoints();
@@ -42,4 +78,3 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 app.Run();
-
