@@ -46,7 +46,11 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         {
             string erroBanco = erro.InnerException.Message;
 
-            if (erroBanco.Contains("NOT NULL constraint failed: Funcionarios.IdCargo"))
+            if (erroBanco.Contains("FOREIGN KEY constraint failed"))
+            {
+                mensagemErro = "Não é possível deletar este registro pois existem outros registros associados a ele.";
+            }
+            else if (erroBanco.Contains("NOT NULL constraint failed: Funcionarios.IdCargo"))
             {
                 mensagemErro = "O cargo deve ser preenchido!";
             }
