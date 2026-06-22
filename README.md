@@ -71,32 +71,47 @@ Exemplo do comportamento interno da nossa Minimal API processando uma requisiç�
 ## 🚀 Como Executar o Projeto
 
 **Pré-requisitos:**
-* [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) instalado.
-* Git instalado.
+* [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) instalado na máquina.
 * Editor de sua preferência (recomendado: Visual Studio Code ou Visual Studio 2022).
 
 **Passo a passo:**
 1. Clone este repositório:
-   ```bash
-   git clone [https://github.com/pacamole/gestao-funcionarios.git](https://github.com/pacamole/gestao-funcionarios.git)
-   ```
-2. Acesse a pasta do projeto e restaure os pacotes:
-   ```bash
-   cd gestao-funcionarios
-   dotnet restore
-   ```
-3. Execute a aplicação (o banco SQLite será criado localmente):
-   ```bash
-   dotnet run
-   ```
-4. **Para testar a API:** Abra o arquivo gestao-funcionarios.http localizado na raiz do projeto diretamente no seu editor. Clique em Send Request (ou Enviar Requisição) acima de cada bloco de código para disparar as chamadas para a API rodando localmente, sem necessidade de ferramentas externas como Postman.
+
+```bash
+git clone https://github.com/pacamole/gestao-funcionarios.git
+```
+
+2. Acesse a pasta do projeto e restaure as dependências do pacote:
+
+```bash
+cd gestao-funcionarios
+
+dotnet restore
+```
+
+3. Crie e atualize o banco de dados SQLite (aplicando as migrações do Entity Framework):
+
+```bash
+dotnet ef database update
+```
+
+4. Execute a aplicação:
+
+```bash
+dotnet run
+```
+
+5. **Para testar a API:** Abra o arquivo `gestao-funcionarios.http` localizado na raiz do projeto diretamente no seu editor. Clique em *Send Request* (ou Enviar Requisição) acima de cada bloco de código para disparar as chamadas para a API rodando localmente, sem necessidade de ferramentas externas como o Postman.
+
+---
 
 ## 🤖 Uso de IA
 
 Conforme diretriz da disciplina, toda a concepção arquitetural, estruturação e documentação deste projeto foram guiadas com o suporte de Inteligência Artificial, que atuou como uma mentora técnica de *System Design*.
 
 * **Ferramenta utilizada:** Google Gemini (Versão 3.1 Pro / Advanced).
-* **Forma de uso (Foco Arquitetural):** * **Design de Sistema e Decisões Técnicas:** Atribuímos à IA a *persona* de uma "Arquiteta de Sistemas Principal". Ela foi utilizada para debater padrões arquiteturais, resultando na escolha estrutural de uma arquitetura *Backend-Only* (API-First) e na adoção do padrão de *Feature Folders* (em detrimento de Controllers monolíticos), otimizando a organização da *Minimal API*.
+* **Forma de uso (Foco Arquitetural):** 
+  * **Design de Sistema e Decisões Técnicas:** Atribuímos à IA a *persona* de uma "Arquiteta de Sistemas Principal". Ela foi utilizada para debater padrões arquiteturais, resultando na escolha estrutural de uma arquitetura *Backend-Only* (API-First) e na adoção do padrão de *Feature Folders* (em detrimento de Controllers monolíticos), otimizando a organização da *Minimal API*.
   * **Engenharia de Dados e DER:** A IA avaliou nossos modelos visuais iniciais de banco de dados e refinou os relacionamentos. Ela nos auxiliou a aplicar o princípio *KISS* (redução de complexidade), transformando um auto-relacionamento estrito da tabela de Setores em um campo descritivo para evitar gargalos arquiteturais de referência circular no Entity Framework.
   * **Diagramação como Código:** A IA foi responsável por traduzir nossas regras de arquitetura para a linguagem *Mermaid.js*, gerando os diagramas formais (C4 Model para infraestrutura e Diagrama de Sequência para o fluxo de dados).
   * **Documentação Técnica:** Estruturação profissional do README, gerando a redação técnica do resumo e a especificação das funcionalidades.
